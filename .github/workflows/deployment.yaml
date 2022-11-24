@@ -5,6 +5,16 @@ on:
       - main
 
 jobs:
+  Deployment:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Start Deployment
+      uses: bobheadxi/deployments@v1
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: prod
+
   Dynatrace_Data_Forwarding : # clean machine without building
     runs-on: ubuntu-latest
     steps:
