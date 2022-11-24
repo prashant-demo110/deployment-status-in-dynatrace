@@ -1,10 +1,19 @@
-name: 'build-test'
-on: # rebuild any PRs and main branch changes
+name: Building and Testing Deployment Over Dynatrace 
+on:
   push:
     branches:
       - main
 
 jobs:
+  build: # make sure build/ci work properly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          npm install
+      - run: |
+          npm run all
+          
   testing: # clean machine without building
     runs-on: ubuntu-latest
     steps:
@@ -22,14 +31,14 @@ jobs:
                 project: "${{ github.repository }}"
                 branch: "${{ github.ref }}"
                 event: "${{ github.event_name }}"
-                owner: wolfgang
+                owner: prashant-demo110
             - metric: "github.build.success"
               value: "1.0"
               dimensions:
                 project: "${{ github.repository }}"
                 branch: "${{ github.ref }}"
                 event: "${{ github.event_name }}"
-                owner: wolfgang
+                owner: prashant-demo110
           events: |
             - title: "Successful Build"
               type: CUSTOM_INFO    
@@ -41,7 +50,7 @@ jobs:
                 project: "${{ github.repository }}"
                 branch: "${{ github.ref }}"
                 event: "${{ github.event_name }}"
-                owner: wolfgang
+                owner: prashant-demo110
       - name: Inform Dynatrace about a failed build 
         if: ${{ failure() }}
         uses: wolfgangB33r/dynatrace-action@v4
@@ -55,14 +64,14 @@ jobs:
                 project: "${{ github.repository }}"
                 branch: "${{ github.ref }}"
                 event: "${{ github.event_name }}"
-                owner: wolfgang
+                owner: prashant-demo110
             - metric: "github.build.fails"
               value: "1.0"
               dimensions:
                 project: "${{ github.repository }}"
                 branch: "${{ github.ref }}"
                 event: "${{ github.event_name }}"
-                owner: wolfgang
+                owner: prashant-demo110
           events: |
             - title: "Failed build"
               type: CUSTOM_INFO    
@@ -74,4 +83,4 @@ jobs:
                 project: "${{ github.repository }}"
                 branch: "${{ github.ref }}"
                 event: "${{ github.event_name }}"
-                owner: wolfgang
+                owner: prashant-demo110
