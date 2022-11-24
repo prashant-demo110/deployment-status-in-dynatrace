@@ -5,79 +5,19 @@ on:
       - main
 
 jobs:
-  build: # make sure build/ci work properly
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: echo "Hello world !!"
-          
   testing: # clean machine without building
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Inform Dynatrace about a successful build (
-        if: ${{ success() }}
-        uses: wolfgangB33r/dynatrace-action@v4
+      - name: Build count
+        uses: dynatrace-oss/dynatrace-github-action@v8
         with:
           url: '${{ secrets.DT_URL }}'
           token: '${{ secrets.DT_TOKEN }}'
           metrics: |
-            - metric: "github.build.total"
+            - metric: "github.metric1"
               value: "1.0"
               dimensions:
                 project: "${{ github.repository }}"
                 branch: "${{ github.ref }}"
                 event: "${{ github.event_name }}"
-                owner: prashant-demo110
-            - metric: "github.build.success"
-              value: "1.0"
-              dimensions:
-                project: "${{ github.repository }}"
-                branch: "${{ github.ref }}"
-                event: "${{ github.event_name }}"
-                owner: prashant-demo110
-          events: |
-            - title: "Successful Build"
-              type: CUSTOM_INFO    
-              description: "GitHub project ${{ github.repository }} was successfully built"
-              source: GitHub
-              entities:
-                - MOBILE_APPLICATION-C061BED4799B41C5
-              dimensions:
-                project: "${{ github.repository }}"
-                branch: "${{ github.ref }}"
-                event: "${{ github.event_name }}"
-                owner: prashant-demo110
-      - name: Inform Dynatrace about a failed build 
-        if: ${{ failure() }}
-        uses: wolfgangB33r/dynatrace-action@v4
-        with:
-          url: '${{ secrets.DT_URL }}'
-          token: '${{ secrets.DT_TOKEN }}'
-          metrics: |
-            - metric: "github.build.total"
-              value: "1.0"
-              dimensions:
-                project: "${{ github.repository }}"
-                branch: "${{ github.ref }}"
-                event: "${{ github.event_name }}"
-                owner: prashant-demo110
-            - metric: "github.build.fails"
-              value: "1.0"
-              dimensions:
-                project: "${{ github.repository }}"
-                branch: "${{ github.ref }}"
-                event: "${{ github.event_name }}"
-                owner: prashant-demo110
-          events: |
-            - title: "Failed build"
-              type: CUSTOM_INFO    
-              description: "GitHub project ${{ github.repository }} build failed!"
-              source: GitHub
-              entities:
-                - MOBILE_APPLICATION-C061BED4799B41C5
-              dimensions:
-                project: "${{ github.repository }}"
-                branch: "${{ github.ref }}"
-                event: "${{ github.event_name }}"
-                owner: prashant-demo110
+                owner: prashant-demo110    
