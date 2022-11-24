@@ -5,7 +5,7 @@ on:
       - main
 
 jobs:
-  testing: # clean machine without building
+  Dynatrace_Data_Forwarding : # clean machine without building
     runs-on: ubuntu-latest
     steps:
       - name: Build count
