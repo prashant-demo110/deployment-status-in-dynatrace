@@ -30,4 +30,26 @@ jobs:
                 project: "${{ github.repository }}"
                 branch: "${{ github.ref }}"
                 event: "${{ github.event_name }}"
-                owner: prashant-demo110    
+                owner: ${{ github.repository_owner }}
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: build
+        run: this-will-fail
+      - name: Notify Dynatrace on Build Failed
+        if: failure()
+        uses: dynatrace-oss/dynatrace-github-action@v8
+        with:
+          url: '${{ secrets.DT_URL }}'
+          token: '${{ secrets.DT_TOKEN }}'
+          events: |
+            - title: "Build failed"
+              type: CUSTOM_INFO
+              entities:
+                - MOBILE_APPLICATION-C061BED4799B41C5
+              properties:
+                description: "Branch ${{ github.ref }} failed to build"
+                source: GitHub
+                project: "${{ github.repository }}"
+                branch: "${{ github.ref }}"
+                event: "${{ github.event_name }}"
+                owner: ${{ github.repository_owner }}
